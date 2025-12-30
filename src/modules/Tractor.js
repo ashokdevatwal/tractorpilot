@@ -19,66 +19,199 @@ export class Tractor {
     }
 
     create() {
-        // Create tractor body - classic Indian tractor colors (red/orange)
+        // Create tractor body - Mahindra style bright red tractor
         this.tractorGroup = new THREE.Group();
         
-        // Main body
-        const bodyGeometry = new THREE.BoxGeometry(2, 1.5, 3.5);
+        // Bright red body material (matching Mahindra)
         const bodyMaterial = new THREE.MeshStandardMaterial({ 
-            color: 0xff4500,
+            color: 0xCC0000,  // Bright red
             roughness: 0.6,
+            metalness: 0.25
+        });
+        
+        // Engine block section
+        const engineGeometry = new THREE.BoxGeometry(1.9, 1.1, 1.5);
+        const engine = new THREE.Mesh(engineGeometry, bodyMaterial);
+        engine.position.set(0, 1.2, 1.4);
+        engine.castShadow = true;
+        this.tractorGroup.add(engine);
+        
+        // Front grille - prominent black grille
+        const grilleGeometry = new THREE.BoxGeometry(1.8, 0.7, 0.2);
+        const grilleMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0x0a0a0a,
+            roughness: 0.9,
             metalness: 0.3
         });
-        const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-        body.position.y = 1;
-        body.castShadow = true;
-        this.tractorGroup.add(body);
+        const grille = new THREE.Mesh(grilleGeometry, grilleMaterial);
+        grille.position.set(0, 1.3, 2.3);
+        grille.castShadow = true;
+        this.tractorGroup.add(grille);
         
-        // Engine hood
-        const hoodGeometry = new THREE.BoxGeometry(1.8, 0.8, 1.5);
-        const hood = new THREE.Mesh(hoodGeometry, bodyMaterial);
-        hood.position.set(0, 1.8, 1.5);
-        hood.castShadow = true;
-        this.tractorGroup.add(hood);
+        // Grille bars - horizontal pattern
+        for (let i = 0; i < 4; i++) {
+            const barGeometry = new THREE.BoxGeometry(1.7, 0.04, 0.1);
+            const bar = new THREE.Mesh(barGeometry, grilleMaterial);
+            bar.position.set(0, 0.95 + i * 0.16, 2.3);
+            this.tractorGroup.add(bar);
+        }
         
-        // Cabin
-        const cabinGeometry = new THREE.BoxGeometry(1.6, 1.2, 1.5);
+        // Yellow stripe on hood (Mahindra signature)
+        const stripeGeometry = new THREE.BoxGeometry(1.8, 0.08, 0.6);
+        const stripeMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0xFFCC00,
+            roughness: 0.5,
+            metalness: 0.3
+        });
+        const stripe = new THREE.Mesh(stripeGeometry, stripeMaterial);
+        stripe.position.set(0, 1.85, 1.6);
+        this.tractorGroup.add(stripe);
+        
+        // Main body/cargo section
+        const mainBodyGeometry = new THREE.BoxGeometry(2.2, 1.3, 2.0);
+        const mainBody = new THREE.Mesh(mainBodyGeometry, bodyMaterial);
+        mainBody.position.set(0, 1.2, -0.6);
+        mainBody.castShadow = true;
+        this.tractorGroup.add(mainBody);
+        
+        // Cabin - more boxy and realistic
+        const cabinGeometry = new THREE.BoxGeometry(1.6, 1.5, 1.3);
         const cabinMaterial = new THREE.MeshStandardMaterial({ 
-            color: 0x333333,
-            roughness: 0.4,
-            metalness: 0.4
+            color: 0x1a1a1a,
+            roughness: 0.5,
+            metalness: 0.3
         });
         const cabin = new THREE.Mesh(cabinGeometry, cabinMaterial);
-        cabin.position.set(0, 2.1, -0.5);
+        cabin.position.set(0, 2.3, -0.2);
         cabin.castShadow = true;
         this.tractorGroup.add(cabin);
         
-        // Windows
-        const windowGeometry = new THREE.BoxGeometry(1.5, 0.8, 0.1);
-        const windowMaterial = new THREE.MeshStandardMaterial({ 
-            color: 0x88ccff,
-            transparent: true,
-            opacity: 0.6,
-            roughness: 0.1,
-            metalness: 0.9
+        // Cabin roof - flat canopy style
+        const roofGeometry = new THREE.BoxGeometry(1.8, 0.3, 1.5);
+        const roofMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0x222222,
+            roughness: 0.6,
+            metalness: 0.2
         });
-        const frontWindow = new THREE.Mesh(windowGeometry, windowMaterial);
-        frontWindow.position.set(0, 2.1, 0.3);
+        const roof = new THREE.Mesh(roofGeometry, roofMaterial);
+        roof.position.set(0, 3.15, -0.2);
+        roof.castShadow = true;
+        this.tractorGroup.add(roof);
+        
+        // Front windshield - large and angled
+        const frontWindowGeometry = new THREE.BoxGeometry(1.5, 0.8, 0.1);
+        const windowMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0x88CCFF,
+            transparent: true,
+            opacity: 0.55,
+            roughness: 0.08,
+            metalness: 0.85
+        });
+        const frontWindow = new THREE.Mesh(frontWindowGeometry, windowMaterial);
+        frontWindow.position.set(0, 2.4, 0.5);
+        frontWindow.rotation.x = -0.15;
         this.tractorGroup.add(frontWindow);
         
-        // Create wheels
+        // Side windows - cabin sides
+        const sideWindowGeometry = new THREE.BoxGeometry(0.45, 0.7, 0.1);
+        const leftWindow = new THREE.Mesh(sideWindowGeometry, windowMaterial);
+        leftWindow.position.set(-0.9, 2.4, -0.3);
+        this.tractorGroup.add(leftWindow);
+        
+        const rightWindow = new THREE.Mesh(sideWindowGeometry, windowMaterial);
+        rightWindow.position.set(0.9, 2.4, -0.3);
+        this.tractorGroup.add(rightWindow);
+        
+        // Headlights - dual round lights
+        const headlightGeometry = new THREE.CylinderGeometry(0.28, 0.28, 0.12, 18);
+        const headlightMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0xFFFF99,
+            emissive: 0xFFDD00,
+            emissiveIntensity: 0.4,
+            roughness: 0.15,
+            metalness: 0.7
+        });
+        
+        const leftHeadlight = new THREE.Mesh(headlightGeometry, headlightMaterial);
+        leftHeadlight.position.set(-0.65, 1.5, 2.4);
+        leftHeadlight.rotation.z = Math.PI / 2;
+        leftHeadlight.castShadow = true;
+        this.tractorGroup.add(leftHeadlight);
+        
+        const rightHeadlight = new THREE.Mesh(headlightGeometry, headlightMaterial);
+        rightHeadlight.position.set(0.65, 1.5, 2.4);
+        rightHeadlight.rotation.z = Math.PI / 2;
+        rightHeadlight.castShadow = true;
+        this.tractorGroup.add(rightHeadlight);
+        
+        // Headlight bezels
+        const bezelsGeometry = new THREE.CylinderGeometry(0.32, 0.32, 0.08, 18);
+        const bezelMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0x444444,
+            roughness: 0.6,
+            metalness: 0.5
+        });
+        
+        const leftBezel = new THREE.Mesh(bezelsGeometry, bezelMaterial);
+        leftBezel.position.set(-0.65, 1.5, 2.45);
+        leftBezel.rotation.z = Math.PI / 2;
+        this.tractorGroup.add(leftBezel);
+        
+        const rightBezel = new THREE.Mesh(bezelsGeometry, bezelMaterial);
+        rightBezel.position.set(0.65, 1.5, 2.45);
+        rightBezel.rotation.z = Math.PI / 2;
+        this.tractorGroup.add(rightBezel);
+        
+        // Side mirrors - larger and more visible
+        const mirrorGeometry = new THREE.BoxGeometry(0.18, 0.35, 0.18);
+        const mirrorMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0xbbbbbb,
+            metalness: 0.8,
+            roughness: 0.15
+        });
+        
+        const leftMirror = new THREE.Mesh(mirrorGeometry, mirrorMaterial);
+        leftMirror.position.set(-1.15, 2.3, 0);
+        leftMirror.castShadow = true;
+        this.tractorGroup.add(leftMirror);
+        
+        const rightMirror = new THREE.Mesh(mirrorGeometry, mirrorMaterial);
+        rightMirror.position.set(1.15, 2.3, 0);
+        rightMirror.castShadow = true;
+        this.tractorGroup.add(rightMirror);
+        
+        // Exhaust stack - tall and prominent
+        const exhaustGeometry = new THREE.CylinderGeometry(0.14, 0.14, 2.2, 14);
+        const exhaustMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0x1a1a1a,
+            roughness: 0.85,
+            metalness: 0.3
+        });
+        const exhaust = new THREE.Mesh(exhaustGeometry, exhaustMaterial);
+        exhaust.position.set(0.8, 2.4, 1.3);
+        exhaust.castShadow = true;
+        this.tractorGroup.add(exhaust);
+        
+        // Exhaust cap/rain cap
+        const capGeometry = new THREE.CylinderGeometry(0.18, 0.14, 0.2, 14);
+        const cap = new THREE.Mesh(capGeometry, exhaustMaterial);
+        cap.position.set(0.8, 3.6, 1.3);
+        cap.castShadow = true;
+        this.tractorGroup.add(cap);
+        
+        // Create wheels - with proper proportions (large rear, small front)
         this.wheels = [];
         const wheelPositions = [
-            { x: -1.2, z: 1.2 },   // Front left
-            { x: 1.2, z: 1.2 },    // Front right
-            { x: -1.3, z: -1.3 },  // Rear left
-            { x: 1.3, z: -1.3 }    // Rear right
+            { x: -0.95, z: 1.4 },   // Front left (small)
+            { x: 0.95, z: 1.4 },    // Front right (small)
+            { x: -1.45, z: -1.1 },  // Rear left (large)
+            { x: 1.45, z: -1.1 }    // Rear right (large)
         ];
         
         wheelPositions.forEach((pos, index) => {
             const isRear = index >= 2;
             const wheel = this.createWheel(isRear);
-            wheel.position.set(pos.x, isRear ? 0.8 : 0.5, pos.z);
+            wheel.position.set(pos.x, isRear ? 1.0 : 0.48, pos.z);
             this.tractorGroup.add(wheel);
             this.wheels.push({
                 mesh: wheel,
@@ -87,14 +220,6 @@ export class Tractor {
                 side: pos.x < 0 ? 'left' : 'right'
             });
         });
-        
-        // Exhaust pipe
-        const exhaustGeometry = new THREE.CylinderGeometry(0.1, 0.1, 1.5, 8);
-        const exhaustMaterial = new THREE.MeshStandardMaterial({ color: 0x444444 });
-        const exhaust = new THREE.Mesh(exhaustGeometry, exhaustMaterial);
-        exhaust.position.set(0.6, 2, 1.5);
-        exhaust.castShadow = true;
-        this.tractorGroup.add(exhaust);
         
         // Plough attachment (initially hidden)
         this.createPlough();
@@ -107,45 +232,89 @@ export class Tractor {
     }
     
     createWheel(isLarge) {
-        const radius = isLarge ? 0.8 : 0.5;
-        const width = isLarge ? 0.4 : 0.3;
+        // Rear wheels: 0.95-1.1 radius, Front wheels: 0.45-0.55 radius
+        const radius = isLarge ? 1.05 : 0.50;
+        const width = isLarge ? 0.55 : 0.32;
         
         const wheelGroup = new THREE.Group();
         
-        // Tire
-        const tireGeometry = new THREE.CylinderGeometry(radius, radius, width, 16);
+        // Tire - deep black rubber with better visibility
+        const tireGeometry = new THREE.CylinderGeometry(radius, radius, width, 32);
         const tireMaterial = new THREE.MeshStandardMaterial({ 
             color: 0x1a1a1a,
-            roughness: 0.9
+            roughness: 0.85,
+            metalness: 0.05
         });
         const tire = new THREE.Mesh(tireGeometry, tireMaterial);
         tire.rotation.z = Math.PI / 2;
         tire.castShadow = true;
         wheelGroup.add(tire);
         
-        // Rim
-        const rimGeometry = new THREE.CylinderGeometry(radius * 0.6, radius * 0.6, width * 1.1, 16);
+        // Rim - red to match body
+        const rimGroup = new THREE.Group();
+        const rimOuterGeometry = new THREE.CylinderGeometry(radius * 0.65, radius * 0.65, width * 1.08, 18);
         const rimMaterial = new THREE.MeshStandardMaterial({ 
-            color: 0xcccccc,
-            metalness: 0.8,
-            roughness: 0.2
+            color: 0xCC0000,  // Mahindra red
+            metalness: 0.75,
+            roughness: 0.25
         });
-        const rim = new THREE.Mesh(rimGeometry, rimMaterial);
-        rim.rotation.z = Math.PI / 2;
-        wheelGroup.add(rim);
+        const rimOuter = new THREE.Mesh(rimOuterGeometry, rimMaterial);
+        rimOuter.rotation.z = Math.PI / 2;
+        rimGroup.add(rimOuter);
         
-        // Treads
-        for (let i = 0; i < 8; i++) {
-            const angle = (i / 8) * Math.PI * 2;
-            const treadGeometry = new THREE.BoxGeometry(0.15, 0.1, width * 0.8);
-            const tread = new THREE.Mesh(treadGeometry, tireMaterial);
-            tread.position.set(
-                Math.cos(angle) * radius * 0.95,
-                Math.sin(angle) * radius * 0.95,
+        // Rim center cap
+        const capGeometry = new THREE.CylinderGeometry(radius * 0.25, radius * 0.25, width * 1.15, 18);
+        const cap = new THREE.Mesh(capGeometry, rimMaterial);
+        cap.rotation.z = Math.PI / 2;
+        rimGroup.add(cap);
+        
+        // Spokes - stronger design
+        const numSpokes = isLarge ? 10 : 5;
+        for (let i = 0; i < numSpokes; i++) {
+            const angle = (i / numSpokes) * Math.PI * 2;
+            const spokeGeometry = new THREE.BoxGeometry(0.1, radius * 0.55, width * 0.85);
+            const spoke = new THREE.Mesh(spokeGeometry, rimMaterial);
+            spoke.position.set(
+                Math.cos(angle) * radius * 0.35,
+                Math.sin(angle) * radius * 0.35,
                 0
             );
-            tread.rotation.z = angle;
-            wheelGroup.add(tread);
+            spoke.rotation.z = angle;
+            rimGroup.add(spoke);
+        }
+        
+        wheelGroup.add(rimGroup);
+        
+        // Deep tread blocks - characteristic of farm tractors
+        const treadWidth = isLarge ? 0.3 : 0.18;
+        const treadHeight = isLarge ? 0.18 : 0.12;
+        const treadBlockGeometry = new THREE.BoxGeometry(treadWidth, treadHeight, width * 0.75);
+        const blockMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0x0a0a0a,
+            roughness: 0.9,
+            metalness: 0
+        });
+        
+        const numTreads = isLarge ? 28 : 14;
+        for (let i = 0; i < numTreads; i++) {
+            let angle = (i / numTreads) * Math.PI * 2;
+            // Rotate rear wheel treads by 90 degrees
+            if (isLarge) {
+                angle += Math.PI / 2;
+            }
+            // Multiple rows of treads for agricultural grip
+            for (let row = -1; row <= 1; row += 1) {
+                const tread = new THREE.Mesh(treadBlockGeometry, blockMaterial);
+                const distance = radius * 0.80 + row * 0.14;
+                tread.position.set(
+                    Math.cos(angle) * distance,
+                    Math.sin(angle) * distance,
+                    0
+                );
+                tread.rotation.z = angle;
+                tread.castShadow = true;
+                wheelGroup.add(tread);
+            }
         }
         
         return wheelGroup;
@@ -154,24 +323,79 @@ export class Tractor {
     createPlough() {
         this.plough = new THREE.Group();
         
-        // Plough blade
-        const bladeGeometry = new THREE.BoxGeometry(2, 0.3, 1);
+        // Main plough frame (tongue)
+        const frameGeometry = new THREE.BoxGeometry(0.3, 0.3, 2);
+        const frameMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0x666666,
+            metalness: 0.6,
+            roughness: 0.5
+        });
+        const frame = new THREE.Mesh(frameGeometry, frameMaterial);
+        frame.position.set(0, 0.8, -1.5);
+        frame.castShadow = true;
+        this.plough.add(frame);
+        
+        // Plough blade - curved for better soil penetration simulation
+        const bladeGeometry = new THREE.BoxGeometry(2.2, 0.4, 1.2);
         const bladeMaterial = new THREE.MeshStandardMaterial({ 
-            color: 0x808080,
-            metalness: 0.7,
-            roughness: 0.4
+            color: 0x707070,
+            metalness: 0.75,
+            roughness: 0.3
         });
         const blade = new THREE.Mesh(bladeGeometry, bladeMaterial);
-        blade.rotation.x = Math.PI / 6;
+        blade.position.set(0, 0.3, -2.5);
+        blade.rotation.x = Math.PI / 5; // More aggressive angle
         blade.castShadow = true;
         this.plough.add(blade);
         
-        // Connection arm
-        const armGeometry = new THREE.BoxGeometry(0.2, 0.2, 1.5);
-        const arm = new THREE.Mesh(armGeometry, bladeMaterial);
-        arm.position.set(0, 0.5, 0.75);
-        arm.castShadow = true;
-        this.plough.add(arm);
+        // Moldboard (side plate)
+        const moldboardGeometry = new THREE.BoxGeometry(0.4, 0.8, 1.1);
+        const moldboardMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0x606060,
+            metalness: 0.7,
+            roughness: 0.35
+        });
+        const moldboard = new THREE.Mesh(moldboardGeometry, moldboardMaterial);
+        moldboard.position.set(-1.2, 0.6, -2.5);
+        moldboard.rotation.z = Math.PI / 8;
+        moldboard.castShadow = true;
+        this.plough.add(moldboard);
+        
+        // Depth control wheel
+        const wheelGeometry = new THREE.CylinderGeometry(0.35, 0.35, 0.25, 16);
+        const wheelMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0x2a2a2a,
+            roughness: 0.8
+        });
+        const wheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
+        wheel.rotation.z = Math.PI / 2;
+        wheel.position.set(1.2, 0.4, -2.3);
+        wheel.castShadow = true;
+        this.plough.add(wheel);
+        
+        // Wheel rim
+        const rimGeometry = new THREE.CylinderGeometry(0.23, 0.23, 0.3, 12);
+        const rimMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0x888888,
+            metalness: 0.7,
+            roughness: 0.3
+        });
+        const rim = new THREE.Mesh(rimGeometry, rimMaterial);
+        rim.rotation.z = Math.PI / 2;
+        rim.position.set(1.2, 0.4, -2.3);
+        this.plough.add(rim);
+        
+        // Adjustment arms
+        const armGeometry = new THREE.BoxGeometry(0.15, 0.15, 1.5);
+        const arm1 = new THREE.Mesh(armGeometry, frameMaterial);
+        arm1.position.set(-0.5, 0.5, -1.8);
+        arm1.castShadow = true;
+        this.plough.add(arm1);
+        
+        const arm2 = new THREE.Mesh(armGeometry, frameMaterial);
+        arm2.position.set(0.5, 0.5, -1.8);
+        arm2.castShadow = true;
+        this.plough.add(arm2);
         
         this.plough.position.set(0, 0.2, -2.5);
         this.plough.visible = false;
