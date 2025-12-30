@@ -27,7 +27,7 @@ export class Camera {
         });
     }
     
-    update(target) {
+    update(target, deltaTime = 0.016) {
         if (!target) return;
         
         // Get target position
@@ -41,8 +41,10 @@ export class Camera {
         const rotatedOffset = this.offset.clone().applyQuaternion(tractorRotation);
         const desiredPosition = targetPosition.clone().add(rotatedOffset);
         
-        // Smooth camera movement
-        this.camera.position.lerp(desiredPosition, this.smoothness);
+        // Smooth camera movement (frame-rate independent)
+        // Convert smoothness to a damping factor
+        const dampingFactor = 1 - Math.exp(-this.smoothness * 10 * deltaTime);
+        this.camera.position.lerp(desiredPosition, dampingFactor);
         
         // Look at point slightly ahead of tractor
         const rotatedLookAt = this.lookAtOffset.clone().applyQuaternion(tractorRotation);

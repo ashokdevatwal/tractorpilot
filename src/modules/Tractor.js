@@ -199,7 +199,8 @@ export class Tractor {
         this.physicsWorld.createCollider(colliderDesc, this.rigidBody);
         
         // Prevent rotation on X and Z axes (keep upright)
-        this.rigidBody.setEnabledRotations(false, true, false, true);
+        // Parameters: (enableX, enableY, enableZ)
+        this.rigidBody.setEnabledRotations(false, true, false);
     }
     
     update(deltaTime, controls) {

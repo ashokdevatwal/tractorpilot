@@ -26,7 +26,8 @@ class TractorSimulator {
     
     async init() {
         try {
-            // Wait for Rapier to be ready (it auto-initializes in v0.12+)
+            // Rapier v0.12+ auto-initializes the WASM module on import
+            // Make it available globally for physics modules
             window.RAPIER = RAPIER;
             
             // Create physics world
@@ -170,7 +171,7 @@ class TractorSimulator {
         
         // Update camera
         if (this.camera && this.tractor) {
-            this.camera.update(this.tractor);
+            this.camera.update(this.tractor, deltaTime);
         }
         
         // Render scene
