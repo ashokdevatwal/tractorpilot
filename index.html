@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Tractor Farming Simulator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            background: #87CEEB;
+        }
+        
+        #canvas-container {
+            width: 100vw;
+            height: 100vh;
+        }
+        
+        #ui-overlay {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: white;
+            font-size: 18px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+        
+        #speedometer {
+            font-size: 32px;
+            font-weight: bold;
+            color: #00ff00;
+            margin-bottom: 10px;
+        }
+        
+        .info-item {
+            margin: 5px 0;
+        }
+        
+        .label {
+            color: #ffcc00;
+            font-weight: bold;
+        }
+        
+        #instructions {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            font-size: 14px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            max-width: 400px;
+        }
+        
+        #instructions h3 {
+            color: #ffcc00;
+            margin-bottom: 10px;
+        }
+        
+        #instructions ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        #instructions li {
+            margin: 5px 0;
+        }
+        
+        #loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 24px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px 50px;
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+        }
+    </style>
+</head>
+<body>
+    <div id="loading">Loading Tractor Simulator...</div>
+    <div id="canvas-container"></div>
+    
+    <div id="ui-overlay" style="display: none;">
+        <div id="speedometer">0 km/h</div>
+        <div class="info-item"><span class="label">Fields Ploughed:</span> <span id="ploughed-count">0</span></div>
+        <div class="info-item"><span class="label">Crops Planted:</span> <span id="crop-count">0</span></div>
+    </div>
+    
+    <div id="instructions" style="display: none;">
+        <h3>🚜 Controls</h3>
+        <ul>
+            <li>⬆️ <strong>W / ↑</strong> - Accelerate</li>
+            <li>⬇️ <strong>S / ↓</strong> - Brake/Reverse</li>
+            <li>⬅️ <strong>A / ←</strong> - Steer Left</li>
+            <li>➡️ <strong>D / →</strong> - Steer Right</li>
+            <li>🌾 <strong>SPACE</strong> - Toggle Plough</li>
+        </ul>
+    </div>
+    
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "name": "tractorpilot",
+  "version": "1.0.0",
+  "description": "3D Indian Tractor Farming Simulator using Three.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "tractor",
+    "farming",
+    "simulator",
+    "3d",
+    "threejs"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@dimforge/rapier3d": "^0.12.0",
+    "three": "^0.160.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "vite-plugin-top-level-await": "^1.6.0",
+    "vite-plugin-wasm": "^3.5.0"
+  }
+}
