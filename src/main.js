@@ -26,8 +26,7 @@ class TractorSimulator {
     
     async init() {
         try {
-            // Initialize Rapier physics
-            await RAPIER.init();
+            // Wait for Rapier to be ready (it auto-initializes in v0.12+)
             window.RAPIER = RAPIER;
             
             // Create physics world
@@ -182,7 +181,13 @@ class TractorSimulator {
 }
 
 // Initialize the simulator when page loads
-window.addEventListener('DOMContentLoaded', async () => {
+async function initSimulator() {
     const simulator = new TractorSimulator();
     await simulator.init();
-});
+}
+
+if (document.readyState === 'loading') {
+    window.addEventListener('DOMContentLoaded', initSimulator);
+} else {
+    initSimulator();
+}

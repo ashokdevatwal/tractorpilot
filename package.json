@@ -8,14 +8,22 @@
     "build": "vite build",
     "preview": "vite preview"
   },
-  "keywords": ["tractor", "farming", "simulator", "3d", "threejs"],
+  "keywords": [
+    "tractor",
+    "farming",
+    "simulator",
+    "3d",
+    "threejs"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "three": "^0.160.0",
-    "@dimforge/rapier3d": "^0.12.0"
+    "@dimforge/rapier3d": "^0.12.0",
+    "three": "^0.160.0"
   },
   "devDependencies": {
-    "vite": "^5.0.0"
+    "vite": "^5.0.0",
+    "vite-plugin-top-level-await": "^1.6.0",
+    "vite-plugin-wasm": "^3.5.0"
   }
 }

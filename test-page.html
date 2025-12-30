@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test</title>
+</head>
+<body>
+    <div id="log"></div>
+    <script type="module">
+        const log = document.getElementById('log');
+        try {
+            import RAPIER from '@dimforge/rapier3d';
+            log.innerHTML = 'RAPIER import started...<br>';
+            
+            RAPIER.init().then(() => {
+                log.innerHTML += 'RAPIER initialized successfully!<br>';
+                window.RAPIER = RAPIER;
+                log.innerHTML += 'Version: ' + RAPIER.version() + '<br>';
+            }).catch(err => {
+                log.innerHTML += 'Error: ' + err.message + '<br>';
+            });
+        } catch(err) {
+            log.innerHTML = 'Import error: ' + err.message;
+        }
+    </script>
+</body>
+</html>
